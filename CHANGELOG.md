@@ -8,15 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- SSH remote development optimizations
-- Multiple remote instance support
-- Better remote connection handling
+- One-line installer script (`install.sh`) for quick setup
+- Settings validator script (`validate.sh`) to verify configuration
+- Configuration profiles system with minimal and complete options
+- Enhanced package.json scripts for easier management
+- Comprehensive file documentation and structure
 
 ### Changed
-- Updated window behavior to support multiple SSH instances
-- Improved remote development workflow
+- Improved README with multiple installation options
+- Enhanced testing and validation workflows
 
-## [1.0.0] - 2025-10-26
+## [1.1.0] - 2025-10-26
 
 ### Added
 - Initial release of VS Code macOS UX optimization package

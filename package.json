@@ -28,15 +28,22 @@
   "files": [
     "settings.json",
     "keybindings.json",
+    "install.sh",
     "test-macos-vscode.sh",
+    "validate.sh",
+    "profiles/",
     "extensions.md",
     "README.md",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
   ],
   "scripts": {
     "test": "./test-macos-vscode.sh",
+    "validate": "./validate.sh",
+    "install": "./install.sh",
     "install-settings": "cp settings.json \"$HOME/Library/Application Support/Code/User/settings.json\"",
     "install-keybindings": "cp keybindings.json \"$HOME/Library/Application Support/Code/User/keybindings.json\"",
+    "install-minimal": "cp profiles/minimal.json \"$HOME/Library/Application Support/Code/User/settings.json\"",
     "backup-settings": "cp \"$HOME/Library/Application Support/Code/User/settings.json\" \"settings.backup.$(date +%s).json\" 2>/dev/null || echo 'No existing settings to backup'",
     "restore-settings": "ls -t settings.backup.*.json 2>/dev/null | head -1 | xargs -I {} cp {} \"$HOME/Library/Application Support/Code/User/settings.json\""
   },

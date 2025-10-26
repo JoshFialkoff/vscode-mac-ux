@@ -39,7 +39,15 @@ This configuration transforms VS Code to behave like a native macOS application 
 
 ## 🚀 Quick Start
 
-### **Option 1: Safe Testing (Recommended)**
+### **Option 1: One-Line Install (Fastest)**
+
+```bash
+curl -sSL https://raw.githubusercontent.com/JoshFialkoff/vscode-mac-ux/main/install.sh | bash
+```
+
+This will automatically backup your settings and apply the optimizations.
+
+### **Option 2: Safe Testing (Recommended)**
 
 Test the configuration safely with automatic backup:
 
@@ -58,7 +66,7 @@ The test script will:
 - ✅ Guide you through testing key features
 - ✅ Provide easy rollback if needed
 
-### **Option 2: Manual Installation**
+### **Option 3: Manual Installation**
 
 If you prefer to install manually:
 
@@ -105,10 +113,32 @@ After installation, verify these features work:
 
 | File | Purpose |
 |------|---------|
-| `settings.json` | Main VS Code settings with macOS optimizations |
+| `settings.json` | Main VS Code settings with complete macOS optimizations |
 | `keybindings.json` | macOS-native keyboard shortcuts |
+| `install.sh` | One-line installer with automatic backup |
 | `test-macos-vscode.sh` | Interactive testing script with backup/restore |
+| `validate.sh` | Settings validator to verify proper configuration |
+| `profiles/` | Different configuration profiles for various use cases |
 | `extensions.md` | Recommended extensions for macOS development |
+
+## 🔧 Configuration Profiles
+
+Choose the right profile for your needs:
+
+- **`profiles/minimal.json`** - Essential macOS integration only
+- **`settings.json`** (main) - Complete optimization with all features
+
+See [`profiles/README.md`](profiles/README.md) for detailed comparison.
+
+## ✅ Validation
+
+After installation, verify everything works:
+
+```bash
+./validate.sh
+```
+
+This will check all macOS-specific settings and report any issues.
 
 ## 🔄 Rollback Instructions
 
