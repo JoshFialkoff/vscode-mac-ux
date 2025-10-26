@@ -1,0 +1,154 @@
+{
+  // === MACOS NATIVE BEHAVIOR ===
+  // Use native macOS title bar
+  "window.titleBarStyle": "native",
+  
+  // Enable native macOS full screen mode
+  "window.nativeFullScreen": true,
+  
+  // Use native macOS tabs
+  "window.nativeTabs": true,
+  
+  // Enable smooth scrolling like other macOS apps
+  "editor.smoothScrolling": true,
+  "workbench.list.smoothScrolling": true,
+  "terminal.integrated.smoothScrolling": true,
+  
+  // Use macOS-style scrollbars that auto-hide
+  "editor.scrollbar.horizontal": "auto",
+  "editor.scrollbar.vertical": "auto",
+  
+  // === TYPOGRAPHY & RENDERING ===
+  // Use SF Mono (Apple's system monospace font) as primary
+  "editor.fontFamily": "SF Mono, Monaco, 'Cascadia Code', 'Fira Code', Consolas, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "SF Mono, Monaco, 'Cascadia Code', monospace",
+  
+  // Optimize font rendering for macOS Retina displays
+  "editor.fontLigatures": true,
+  "editor.fontSize": 13,
+  "editor.lineHeight": 1.5,
+  "editor.fontWeight": "400",
+  
+  // Use subpixel antialiasing (better for non-Retina displays)
+  "workbench.fontAliasing": "auto",
+  
+  // === MACOS APPEARANCE ===
+  // Follow system theme automatically
+  "window.autoDetectColorScheme": true,
+  "workbench.preferredDarkColorTheme": "Default Dark Modern",
+  "workbench.preferredLightColorTheme": "Default Light Modern",
+  
+  // Use macOS-style transparency and blur effects
+  "workbench.tree.renderIndentGuides": "always",
+  "workbench.colorTheme": "Default Dark Modern",
+  
+  // === WINDOW & WORKSPACE BEHAVIOR ===
+  // Restore windows like other macOS apps
+  "window.restoreWindows": "all",
+  
+  // Close window when last tab is closed (macOS convention)
+  "window.closeWhenEmpty": true,
+  
+  // Open new windows in center like macOS apps
+  "window.newWindowDimensions": "inherit",
+  
+  // === FILE HANDLING ===
+  // Auto-save like other macOS apps
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  
+  // Trim whitespace on save (clean code practice)
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  
+  // Use macOS line endings by default
+  "files.eol": "\n",
+  
+  // === EDITOR BEHAVIOR ===
+  // Enable format on save (maintains code quality)
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": false,
+  
+  // Use word wrap like TextEdit and other macOS text editors
+  "editor.wordWrap": "bounded",
+  "editor.wordWrapColumn": 120,
+  
+  // Show whitespace characters subtly
+  "editor.renderWhitespace": "boundary",
+  
+  // Enable bracket pair colorization
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  
+  // === TERMINAL ===
+  // Use zsh as default shell (macOS default since Catalina)
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  
+  // Terminal appearance
+  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.lineHeight": 1.2,
+  
+  // Enable terminal bell (macOS convention)
+  "terminal.integrated.enableBell": true,
+  
+  // === EXPLORER & FILES ===
+  // Show file icons (better visual organization)
+  "workbench.iconTheme": "vs-seti",
+  
+  // Compact folder display
+  "explorer.compactFolders": true,
+  
+  // Sort files like Finder
+  "explorer.sortOrder": "type",
+  
+  // === SEARCH & NAVIGATION ===
+  // Enable fuzzy search like Spotlight
+  "search.useGlobalIgnoreFiles": true,
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/.git": true,
+    "**/.DS_Store": true
+  },
+  
+  // === PERFORMANCE ===
+  // Optimize for macOS
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true,
+    "**/.DS_Store": true
+  },
+  
+  // === ACCESSIBILITY ===
+  // Respect macOS accessibility settings
+  "editor.accessibilitySupport": "auto",
+  "workbench.reduceMotion": "auto",
+  
+  // === UPDATES ===
+  // Check for updates automatically (macOS convention)
+  "update.mode": "start",
+  "update.showReleaseNotes": true,
+  
+  // === TELEMETRY (Privacy-conscious like Apple) ===
+  "telemetry.telemetryLevel": "error",
+  
+  // === INTEGRATED TOOLS ===
+  // Git integration
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  
+  // Breadcrumbs (navigation aid)
+  "breadcrumbs.enabled": true,
+  
+  // === WORKSPACE TRUST ===
+  "security.workspace.trust.untrustedFiles": "prompt",
+  
+  // === MINIMAP ===
+  "editor.minimap.enabled": true,
+  "editor.minimap.scale": 1,
+  "editor.minimap.showSlider": "always"
+}
