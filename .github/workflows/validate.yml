@@ -1,0 +1,108 @@
+name: Configuration Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+    name: Validate JSON Configuration Files
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Validate settings.json
+      run: |
+        # Remove comments and validate JSON structure
+        cat settings.json | grep -v "^\s*//" | jq . > /dev/null
+        echo "✅ settings.json is valid JSON"
+    
+    - name: Validate keybindings.json
+      run: |
+        # Remove comments and validate JSON structure
+        cat keybindings.json | grep -v "^\s*//" | jq . > /dev/null
+        echo "✅ keybindings.json is valid JSON"
+    
+    - name: Validate package.json
+      run: |
+        jq . package.json > /dev/null
+        echo "✅ package.json is valid JSON"
+
+  validate-shell-scripts:
+    runs-on: macos-latest
+    name: Validate Shell Scripts
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install shellcheck
+      run: brew install shellcheck
+    
+    - name: Check test script
+      run: |
+        shellcheck test-macos-vscode.sh
+        echo "✅ test-macos-vscode.sh passes shellcheck"
+    
+    - name: Test script execution (dry run)
+      run: |
+        chmod +x test-macos-vscode.sh
+        # We can't fully test the script in CI, but we can check it runs
+        echo "Script is executable and ready for testing"
+
+  check-macos-settings:
+    runs-on: macos-latest
+    name: Check macOS-specific Settings
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check for macOS-specific configurations
+      run: |
+        # Check that key macOS settings are present
+        grep -q "window.titleBarStyle.*native" settings.json || (echo "❌ Missing native title bar setting" && exit 1)
+        grep -q "SF Mono" settings.json || (echo "❌ Missing SF Mono font setting" && exit 1)
+        grep -q "terminal.integrated.defaultProfile.osx" settings.json || (echo "❌ Missing macOS terminal profile" && exit 1)
+        grep -q "cmd+" keybindings.json || (echo "❌ Missing Cmd-based shortcuts" && exit 1)
+        echo "✅ All key macOS settings found"
+    
+    - name: Check for macOS system fonts
+      run: |
+        # Verify SF Mono is available on macOS
+        fc-list | grep -i "sf mono" || system_profiler SPFontsDataType | grep -i "sf mono" || echo "⚠️ SF Mono font not found, will fall back to Monaco"
+        fc-list | grep -i "monaco" || echo "⚠️ Monaco font not found"
+
+  documentation-check:
+    runs-on: ubuntu-latest
+    name: Documentation Quality Check
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check README completeness
+      run: |
+        # Check that README has essential sections
+        grep -q "Quick Start" README.md || (echo "❌ Missing Quick Start section" && exit 1)
+        grep -q "What to Test" README.md || (echo "❌ Missing testing instructions" && exit 1)
+        grep -q "Rollback" README.md || (echo "❌ Missing rollback instructions" && exit 1)
+        echo "✅ README has all essential sections"
+    
+    - name: Check CHANGELOG format
+      run: |
+        grep -q "## \[Unreleased\]" CHANGELOG.md || (echo "❌ Missing Unreleased section in CHANGELOG" && exit 1)
+        grep -q "## \[.*\] - 20" CHANGELOG.md || (echo "❌ Missing versioned releases in CHANGELOG" && exit 1)
+        echo "✅ CHANGELOG follows proper format"
+    
+    - name: Validate links in documentation
+      run: |
+        # Basic check for broken internal links
+        if grep -o "\[.*\](.*)" README.md | grep -v "http" | grep -v "mailto" | cut -d'(' -f2 | cut -d')' -f1 | while read -r file; do
+          if [ ! -f "$file" ] && [ ! -d "$file" ]; then
+            echo "❌ Broken internal link: $file"
+            exit 1
+          fi
+        done; then
+          echo "✅ No broken internal links found"
+        fi

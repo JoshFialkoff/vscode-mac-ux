@@ -46,11 +46,20 @@
   // Restore windows like other macOS apps
   "window.restoreWindows": "all",
   
-  // Close window when last tab is closed (macOS convention)
-  "window.closeWhenEmpty": true,
+  // Don't close window when last tab is closed (allows multiple SSH instances)
+  "window.closeWhenEmpty": false,
   
   // Open new windows in center like macOS apps
   "window.newWindowDimensions": "inherit",
+  
+  // Allow multiple remote connections without closing existing instances
+  "remote.SSH.enableDynamicForwarding": true,
+  "remote.SSH.showLoginTerminal": true,
+  "remote.SSH.remotePlatform": {},
+  "remote.SSH.connectTimeout": 15,
+  
+  // Keep SSH connections alive
+  "remote.SSH.enableAgentForwarding": true,
   
   // === FILE HANDLING ===
   // Auto-save like other macOS apps
@@ -143,6 +152,18 @@
   
   // Breadcrumbs (navigation aid)
   "breadcrumbs.enabled": true,
+  
+  // === REMOTE DEVELOPMENT ===
+  // SSH remote configuration for multiple instances
+  "remote.autoForwardPorts": false,
+  "remote.autoForwardPortsSource": "hybrid",
+  "remote.extensionKind": {
+    "ms-vscode.remote-explorer": ["ui"]
+  },
+  
+  // Don't reload window when connecting to remote
+  "remote.SSH.useLocalServer": false,
+  "remote.SSH.lockfilesInTmp": true,
   
   // === WORKSPACE TRUST ===
   "security.workspace.trust.untrustedFiles": "prompt",

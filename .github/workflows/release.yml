@@ -1,0 +1,95 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    name: Create GitHub Release
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Extract changelog for this version
+      id: changelog
+      run: |
+        # Extract the changelog section for this version
+        awk '/^## \['"${{ steps.get_version.outputs.VERSION }}"'\]/,/^## \[.*\]/{if(/^## \[.*\]/ && !/^## \['"${{ steps.get_version.outputs.VERSION }}"'\]/) exit; print}' CHANGELOG.md | head -n -1 > release_notes.md
+        echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+        cat release_notes.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+    
+    - name: Create Release Archive
+      run: |
+        # Create a clean archive without git files
+        mkdir -p release-assets
+        tar --exclude='.git' --exclude='.github' --exclude='release-assets' -czf "release-assets/vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.tar.gz" .
+        zip -r "release-assets/vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.zip" . -x ".git/*" ".github/*" "release-assets/*"
+    
+    - name: Create GitHub Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: VS Code macOS UX v${{ steps.get_version.outputs.VERSION }}
+        body: |
+          # VS Code macOS UX v${{ steps.get_version.outputs.VERSION }}
+          
+          ${{ steps.changelog.outputs.CHANGELOG }}
+          
+          ## 🚀 Installation
+          
+          ### Quick Start (Recommended)
+          ```bash
+          curl -L https://github.com/JoshFialkoff/vscode-mac-ux/archive/v${{ steps.get_version.outputs.VERSION }}.tar.gz | tar -xz
+          cd vscode-mac-ux-${{ steps.get_version.outputs.VERSION }}
+          ./test-macos-vscode.sh
+          ```
+          
+          ### Manual Download
+          - [📦 Download .tar.gz](https://github.com/JoshFialkoff/vscode-mac-ux/archive/v${{ steps.get_version.outputs.VERSION }}.tar.gz)
+          - [📦 Download .zip](https://github.com/JoshFialkoff/vscode-mac-ux/archive/v${{ steps.get_version.outputs.VERSION }}.zip)
+          
+          ## 🧪 Testing
+          Always test before applying permanently:
+          ```bash
+          ./test-macos-vscode.sh
+          ```
+          
+          ## 📚 Documentation
+          - [📖 Full Documentation](https://github.com/JoshFialkoff/vscode-mac-ux/blob/v${{ steps.get_version.outputs.VERSION }}/README.md)
+          - [🔧 Extension Recommendations](https://github.com/JoshFialkoff/vscode-mac-ux/blob/v${{ steps.get_version.outputs.VERSION }}/extensions.md)
+          - [🤝 Contributing](https://github.com/JoshFialkoff/vscode-mac-ux/blob/v${{ steps.get_version.outputs.VERSION }}/CONTRIBUTING.md)
+        draft: false
+        prerelease: false
+    
+    - name: Upload Release Assets
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release-assets/vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.tar.gz
+        asset_name: vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.tar.gz
+        asset_content_type: application/gzip
+    
+    - name: Upload ZIP Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release-assets/vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.zip
+        asset_name: vscode-mac-ux-v${{ steps.get_version.outputs.VERSION }}.zip
+        asset_content_type: application/zip

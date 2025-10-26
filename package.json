@@ -1,0 +1,55 @@
+{
+  "name": "vscode-mac-ux",
+  "version": "1.1.0",
+  "description": "VS Code macOS UX optimization package with native behavior, keyboard shortcuts, and performance enhancements",
+  "keywords": [
+    "vscode",
+    "macos",
+    "configuration",
+    "settings",
+    "ux",
+    "optimization",
+    "native",
+    "keyboard-shortcuts",
+    "sf-mono",
+    "theme"
+  ],
+  "author": "Josh Fialkoff",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JoshFialkoff/vscode-mac-ux.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JoshFialkoff/vscode-mac-ux/issues"
+  },
+  "homepage": "https://github.com/JoshFialkoff/vscode-mac-ux#readme",
+  "main": "settings.json",
+  "files": [
+    "settings.json",
+    "keybindings.json",
+    "test-macos-vscode.sh",
+    "extensions.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "./test-macos-vscode.sh",
+    "install-settings": "cp settings.json \"$HOME/Library/Application Support/Code/User/settings.json\"",
+    "install-keybindings": "cp keybindings.json \"$HOME/Library/Application Support/Code/User/keybindings.json\"",
+    "backup-settings": "cp \"$HOME/Library/Application Support/Code/User/settings.json\" \"settings.backup.$(date +%s).json\" 2>/dev/null || echo 'No existing settings to backup'",
+    "restore-settings": "ls -t settings.backup.*.json 2>/dev/null | head -1 | xargs -I {} cp {} \"$HOME/Library/Application Support/Code/User/settings.json\""
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "tags": [
+    "macos",
+    "configuration",
+    "settings",
+    "optimization"
+  ]
+}
