@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code macOS Settings - Live Preview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .demo-section {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .controls {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .control-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-group h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1d1d1f;
+        }
+
+        .toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: #e5e5e7;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .switch.active {
+            background: #007acc;
+        }
+
+        .switch-thumb {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .switch.active .switch-thumb {
+            transform: translateX(20px);
+        }
+
+        .preview {
+            background: #2d2d2d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .vscode-titlebar {
+            height: 40px;
+            background: #3c3c3c;
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            color: #cccccc;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .vscode-titlebar.native {
+            background: linear-gradient(to bottom, #393939, #2d2d2d);
+            height: 32px;
+            padding-left: 80px;
+            position: relative;
+        }
+
+        .traffic-lights {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: none;
+            gap: 8px;
+        }
+
+        .vscode-titlebar.native .traffic-lights {
+            display: flex;
+        }
+
+        .traffic-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background: #ff5f57; }
+        .minimize { background: #ffbd2e; }
+        .maximize { background: #28ca42; }
+
+        .vscode-body {
+            display: flex;
+            height: 400px;
+        }
+
+        .vscode-sidebar {
+            width: 240px;
+            background: #252526;
+            border-right: 1px solid #2d2d2d;
+            padding: 1rem;
+        }
+
+        .vscode-editor {
+            flex: 1;
+            background: #1e1e1e;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            color: #d4d4d4;
+            transition: all 0.3s ease;
+        }
+
+        .vscode-editor.sf-mono {
+            font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .code-sample {
+            white-space: pre-line;
+        }
+
+        .install-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .install-command {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'SF Mono', 'Monaco', monospace;
+            font-size: 14px;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f9f9f9;
+            border-radius: 6px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff3b30;
+            transition: background 0.3s ease;
+        }
+
+        .status-indicator.active {
+            background: #30d158;
+        }
+
+        @media (max-width: 768px) {
+            .demo-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍎 VS Code macOS Live Preview</h1>
+            <p>See exactly how your VS Code will look with macOS optimizations</p>
+        </div>
+
+        <div class="demo-section">
+            <div class="controls">
+                <div class="control-group">
+                    <h3>🎨 macOS Integration</h3>
+                    <div class="toggle">
+                        <span>Native Title Bar</span>
+                        <div class="switch" data-feature="native-titlebar">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="toggle">
+                        <span>Traffic Light Controls</span>
+                        <div class="switch" data-feature="traffic-lights">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>🔤 Typography</h3>
+                    <div class="toggle">
+                        <span>SF Mono Font</span>
+                        <div class="switch" data-feature="sf-mono">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="toggle">
+                        <span>Optimized Spacing</span>
+                        <div class="switch" data-feature="spacing">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>⚡ Performance</h3>
+                    <div class="toggle">
+                        <span>Smooth Scrolling</span>
+                        <div class="switch active" data-feature="smooth-scroll">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="toggle">
+                        <span>Auto-Save</span>
+                        <div class="switch active" data-feature="auto-save">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <h3>🔧 Developer Tools</h3>
+                    <div class="toggle">
+                        <span>SSH Multi-Instance</span>
+                        <div class="switch active" data-feature="ssh-multi">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="toggle">
+                        <span>Git Integration</span>
+                        <div class="switch active" data-feature="git">
+                            <div class="switch-thumb"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview">
+                <div class="vscode-titlebar" id="titlebar">
+                    <div class="traffic-lights">
+                        <div class="traffic-light close"></div>
+                        <div class="traffic-light minimize"></div>
+                        <div class="traffic-light maximize"></div>
+                    </div>
+                    VS Code - macOS Optimized
+                </div>
+                <div class="vscode-body">
+                    <div class="vscode-sidebar">
+                        <div style="color: #cccccc; font-size: 12px;">
+                            📁 EXPLORER<br><br>
+                            📄 settings.json<br>
+                            📄 keybindings.json<br>
+                            📄 install.sh<br>
+                            📁 profiles/<br>
+                            📄 README.md
+                        </div>
+                    </div>
+                    <div class="vscode-editor" id="editor">
+                        <div class="code-sample">{
+  "window.titleBarStyle": "native",
+  "window.nativeFullScreen": true,
+  "editor.fontFamily": "SF Mono, Monaco",
+  "editor.fontSize": 13,
+  "editor.smoothScrolling": true,
+  "files.autoSave": "afterDelay",
+  "remote.SSH.enableDynamicForwarding": true,
+  "git.enableSmartCommit": true
+}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="install-section">
+            <h2>🚀 Ready to Apply These Settings?</h2>
+            <p>One command installs everything safely with automatic backup</p>
+            
+            <div class="install-command">
+                curl -sSL https://raw.githubusercontent.com/JoshFialkoff/vscode-mac-ux/main/install.sh | bash
+                <button class="copy-btn" onclick="copyInstallCommand()">Copy</button>
+            </div>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="status-indicator" data-status="native-titlebar"></div>
+                    <span>Native macOS title bar</span>
+                </div>
+                <div class="feature-item">
+                    <div class="status-indicator" data-status="sf-mono"></div>
+                    <span>SF Mono font</span>
+                </div>
+                <div class="feature-item">
+                    <div class="status-indicator active" data-status="smooth-scroll"></div>
+                    <span>Smooth scrolling</span>
+                </div>
+                <div class="feature-item">
+                    <div class="status-indicator active" data-status="auto-save"></div>
+                    <span>Auto-save behavior</span>
+                </div>
+                <div class="feature-item">
+                    <div class="status-indicator active" data-status="ssh-multi"></div>
+                    <span>SSH multi-instance fix</span>
+                </div>
+                <div class="feature-item">
+                    <div class="status-indicator active" data-status="git"></div>
+                    <span>Enhanced Git integration</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle functionality
+        document.querySelectorAll('.switch').forEach(switchEl => {
+            switchEl.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const feature = this.dataset.feature;
+                updatePreview(feature, this.classList.contains('active'));
+                updateStatusIndicator(feature, this.classList.contains('active'));
+            });
+        });
+
+        function updatePreview(feature, isActive) {
+            const titlebar = document.getElementById('titlebar');
+            const editor = document.getElementById('editor');
+
+            switch(feature) {
+                case 'native-titlebar':
+                case 'traffic-lights':
+                    if (isActive) {
+                        titlebar.classList.add('native');
+                    } else {
+                        titlebar.classList.remove('native');
+                    }
+                    break;
+                    
+                case 'sf-mono':
+                    if (isActive) {
+                        editor.classList.add('sf-mono');
+                    } else {
+                        editor.classList.remove('sf-mono');
+                    }
+                    break;
+            }
+        }
+
+        function updateStatusIndicator(feature, isActive) {
+            const indicator = document.querySelector(`[data-status="${feature}"]`);
+            if (indicator) {
+                if (isActive) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            }
+        }
+
+        function copyInstallCommand() {
+            const command = 'curl -sSL https://raw.githubusercontent.com/JoshFialkoff/vscode-mac-ux/main/install.sh | bash';
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+
+        // Initialize some toggles as active
+        document.addEventListener('DOMContentLoaded', function() {
+            const activeFeatures = ['smooth-scroll', 'auto-save', 'ssh-multi', 'git'];
+            activeFeatures.forEach(feature => {
+                const switchEl = document.querySelector(`[data-feature="${feature}"]`);
+                if (switchEl) {
+                    switchEl.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -2,6 +2,12 @@
 
 A comprehensive configuration package that optimizes Visual Studio Code for macOS, bringing native behavior, appearance, and keyboard shortcuts that feel natural to Mac users.
 
+## 🎮 **Try the Interactive Demo**
+
+**👀 See it in action:** [Live Interactive Demo](https://joshfialkoff.github.io/vscode-mac-ux/live-preview.html)
+
+**📱 Quick overview:** [Visual Before/After](https://joshfialkoff.github.io/vscode-mac-ux/)
+
 ## 🍎 What This Does
 
 This configuration transforms VS Code to behave like a native macOS application by:
